@@ -1,0 +1,53 @@
+name: todoApp
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/dev.Dockerfile
+    environment:
+      - LOGGING_LEVEL_ROOT
+      - SPRING_DATASOURCE_PASSWORD
+      - SPRING_DATASOURCE_URL
+      - SPRING_DATASOURCE_USERNAME
+      - SPRING_JPA_HIBERNATE_DDLAUTO
+      - SPRINGDOC_APIDOCS_ENABLED
+      - SPRING_SQL_INIT_MODE
+      - SPRING_JPA_DEFERDATASOURCEINITIALIZATION
+      - SPRING_SQL_INIT_CONTINUEONERROR
+      - ADMIN_USERNAME
+      - ADMIN_PASSWORD
+      - ADMIN_FIRSTNAME
+      - ADMIN_LASTNAME
+    image: firo1919/todoApp:dev
+    networks:
+      - app
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+  db:
+    environment:
+      - MARIADB_DATABASE
+      - MARIADB_PASSWORD
+      - MARIADB_ROOT_PASSWORD
+      - MARIADB_USER
+    image: "mariadb:latest"
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    ports:
+      - "3306:3306"
+volumes:
+  db_data:
+networks:
+  app:
