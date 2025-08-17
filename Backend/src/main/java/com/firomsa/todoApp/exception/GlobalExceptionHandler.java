@@ -81,7 +81,7 @@ public class GlobalExceptionHandler {
 
         log.warn(exception.getMessage());
         ResponseDTO<Object> response = ResponseDTO.builder()
-                .message("something happened in the server")
+                .message("An internal server error occurred")
                 .status(false)
                 .build();
 
