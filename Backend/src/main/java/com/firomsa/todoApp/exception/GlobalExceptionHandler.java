@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
                 .status(false)
                 .build();
 
-        return ResponseEntity.badRequest().body(response);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @ExceptionHandler({ UserNameAlreadyExistsException.class })
