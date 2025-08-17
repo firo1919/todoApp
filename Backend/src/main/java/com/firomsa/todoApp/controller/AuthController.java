@@ -44,7 +44,8 @@ public class AuthController {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private static final int REFRESH_TOKEN_DURATION = 15;
+    // Duration of refresh token validity in days
+    private static final int REFRESH_TOKEN_DURATION_DAYS = 15;
 
     public AuthController(
             UserService userService,
