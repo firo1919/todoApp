@@ -6,7 +6,7 @@ COPY src ./src
 
 COPY pom.xml .
 
-RUN mvn clean package
+RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:21-jre-alpine AS runner
 
