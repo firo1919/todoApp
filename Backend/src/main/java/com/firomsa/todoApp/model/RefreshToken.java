@@ -33,6 +33,5 @@ public class RefreshToken {
     @NotNull
     private LocalDateTime createdAt;
     @NotNull
-
     private LocalDateTime expiresAt;
 }
