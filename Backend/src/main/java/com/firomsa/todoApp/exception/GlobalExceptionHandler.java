@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
                 .status(false)
                 .build();
 
-        return ResponseEntity.badRequest().body(response);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
     @ExceptionHandler({ Exception.class })
