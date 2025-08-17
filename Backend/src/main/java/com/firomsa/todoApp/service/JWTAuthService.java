@@ -15,7 +15,8 @@ import io.jsonwebtoken.Jwts;
 @Service
 public class JWTAuthService {
 
-    private static final int JWT_DURATION = 15;
+    // JWT token duration in minutes
+    private static final int JWT_DURATION_MINUTES = 15;
 
     private final AuthConfig authConfig;
 
