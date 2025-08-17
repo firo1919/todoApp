@@ -28,7 +28,7 @@ public class JWTAuthService {
     // code to generate Token
 
     public String generateToken(String subject) {
-        String tokenId = String.valueOf(random.nextInt(10000));
+        String tokenId = UUID.randomUUID().toString();
         Date issuedAt = new Date(System.currentTimeMillis());
         Date expiresAt = new Date(issuedAt.getTime() + TimeUnit.MINUTES.toMillis(JWT_DURATION));
         return Jwts.builder()
