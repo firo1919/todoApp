@@ -3,6 +3,7 @@ package com.firomsa.todoApp.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +43,7 @@ public class TodoService {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDTO<List<TodoResponseDTO>> getAll() {
         List<Todo> todos = todoRepository.findAll();
         List<TodoResponseDTO> data = todos.stream().map(todo -> TodoMapper.toDTO(todo)).toList();
