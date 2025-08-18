@@ -130,7 +130,7 @@ public class UserService implements UserDetailsService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseDTO<UserResponseDTO> createAdmin(RegisterUserRequest registerUserRequest, String userName) {
+    public ResponseDTO<UserResponseDTO> createAdmin(RegisterUserRequest registerUserRequest) {
         if (userRepository.existsByUsername(registerUserRequest.getUsername())) {
             throw new UserNameAlreadyExistsException();
         }

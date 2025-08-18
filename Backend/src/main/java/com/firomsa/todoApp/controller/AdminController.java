@@ -67,10 +67,9 @@ public class AdminController {
 
     @PostMapping("/users")
     @Operation(summary = "For creating an admin")
-    public ResponseEntity<ResponseDTO<UserResponseDTO>> createAdmin(Principal principal,
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> createAdmin(
             @Valid @RequestBody RegisterUserRequest userRequestDTO) {
-        String userName = principal.getName();
-        ResponseDTO<UserResponseDTO> response = userService.createAdmin(userRequestDTO, userName);
+        ResponseDTO<UserResponseDTO> response = userService.createAdmin(userRequestDTO);
         return ResponseEntity.ok().body(response);
     }
 
