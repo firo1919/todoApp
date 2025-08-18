@@ -3,6 +3,7 @@ package com.firomsa.todoApp.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +43,7 @@ public class TodoService {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDTO<List<TodoResponseDTO>> getAll() {
         List<Todo> todos = todoRepository.findAll();
         List<TodoResponseDTO> data = todos.stream().map(todo -> TodoMapper.toDTO(todo)).toList();
@@ -104,15 +106,11 @@ public class TodoService {
                 .build();
     }
 
-    public ResponseDTO<Object> delete(int id, String userName) {
+    public void delete(int id, String userName) {
         Todo todo = todoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException());
         if (todo.getUser() == null || !todo.getUser().getUsername().equals(userName)) {
             throw new ResourceNotFoundException();
         }
         todoRepository.deleteById(id);
-        return ResponseDTO.builder()
-                .message("successfully deleted a todo")
-                .status(true)
-                .build();
     }
 }

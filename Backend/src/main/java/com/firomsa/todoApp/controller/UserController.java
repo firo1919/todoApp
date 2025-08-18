@@ -3,7 +3,6 @@ package com.firomsa.todoApp.controller;
 import java.security.Principal;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,8 +60,8 @@ public class UserController {
     @Operation(summary = "For deleting user profile")
     public ResponseEntity<ResponseDTO<Object>> deleteUserProfile(Principal principal) {
         String userName = principal.getName();
-        ResponseDTO<Object> response = userService.delete(userName);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+        userService.delete(userName);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/todos")
@@ -101,9 +100,9 @@ public class UserController {
 
     @DeleteMapping("/todos/{id}")
     @Operation(summary = "For removing a given todo")
-    public ResponseEntity<ResponseDTO<Object>> deleteTodo(@PathVariable int id, Principal principal) {
+    public ResponseEntity<Void> deleteTodo(@PathVariable int id, Principal principal) {
         String userName = principal.getName();
-        ResponseDTO<Object> response = todoService.delete(id, userName);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+        todoService.delete(id, userName);
+        return ResponseEntity.noContent().build();
     }
 }

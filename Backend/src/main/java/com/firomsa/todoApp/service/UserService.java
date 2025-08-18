@@ -3,6 +3,7 @@ package com.firomsa.todoApp.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -73,6 +74,7 @@ public class UserService implements UserDetailsService {
                         "USER: " + username + " Not found"));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDTO<List<UserResponseDTO>> getAll() {
         List<User> users = userRepository.findAll();
         List<UserResponseDTO> usersDTO = users.stream().map(user -> UserMapper.toDTO(user)).toList();
@@ -118,16 +120,45 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
-    public ResponseDTO<Object> delete(String username) {
+    public void delete(String username) {
         User user = userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "USER: " + username + " Not found"));
         user.setActive(false);
         userRepository.save(user);
-        return ResponseDTO.builder()
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseDTO<UserResponseDTO> createAdmin(RegisterUserRequest registerUserRequest) {
+        if (userRepository.existsByUsername(registerUserRequest.getUsername())) {
+            throw new UserNameAlreadyExistsException();
+        }
+
+        Role role = roleRepository
+                .findByName("ADMIN")
+                .orElseThrow(ResourceNotFoundException::new);
+
+        User user = UserMapper.toModel(registerUserRequest);
+        LocalDateTime now = LocalDateTime.now();
+        user.setRole(role);
+        user.setCreatedAt(now);
+        user.setUpdatedAt(now);
+        user.setPassword(passwordEncoder.encode(registerUserRequest.getPassword()));
+        User registeredUser = userRepository.save(user);
+        return ResponseDTO.<UserResponseDTO>builder()
                 .status(true)
-                .message("user successfully removed")
+                .message("admin registered successfully")
+                .data(UserMapper.toDTO(registeredUser))
                 .build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public void forceDelete(String username) {
+        User user = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "USER: " + username + " Not found"));
+        userRepository.delete(user);
     }
 }
