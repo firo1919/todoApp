@@ -106,15 +106,11 @@ public class TodoService {
                 .build();
     }
 
-    public ResponseDTO<Object> delete(int id, String userName) {
+    public void delete(int id, String userName) {
         Todo todo = todoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException());
         if (todo.getUser() == null || !todo.getUser().getUsername().equals(userName)) {
             throw new ResourceNotFoundException();
         }
         todoRepository.deleteById(id);
-        return ResponseDTO.builder()
-                .message("successfully deleted a todo")
-                .status(true)
-                .build();
     }
 }
