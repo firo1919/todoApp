@@ -1,6 +1,7 @@
 package com.firomsa.todoApp.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -70,5 +71,28 @@ public class UserService implements UserDetailsService {
                 .findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "USER: " + username + " Not found"));
+    }
+
+    public ResponseDTO<List<UserResponseDTO>> getAll() {
+        List<User> users = userRepository.findAll();
+        List<UserResponseDTO> usersDTO = users.stream().map(user -> UserMapper.toDTO(user)).toList();
+        return ResponseDTO.<List<UserResponseDTO>>builder()
+                .status(true)
+                .data(usersDTO)
+                .message("Users successfully fetched")
+                .build();
+    }
+
+    public ResponseDTO<UserResponseDTO> get(String username) {
+        User user = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "USER: " + username + " Not found"));
+        ResponseDTO<UserResponseDTO> data = ResponseDTO.<UserResponseDTO>builder()
+                .data(UserMapper.toDTO(user))
+                .message("User profile successfully fetched")
+                .status(true)
+                .build();
+        return data;
     }
 }

@@ -1,7 +1,7 @@
 package com.firomsa.todoApp.service;
 
 import java.util.Date;
-import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.stereotype.Service;
@@ -20,8 +20,6 @@ public class JWTAuthService {
 
     private final AuthConfig authConfig;
 
-    private final Random random = new Random();
-
     public JWTAuthService(AuthConfig authConfig) {
         this.authConfig = authConfig;
     }
@@ -31,7 +29,7 @@ public class JWTAuthService {
     public String generateToken(String subject) {
         String tokenId = UUID.randomUUID().toString();
         Date issuedAt = new Date(System.currentTimeMillis());
-        Date expiresAt = new Date(issuedAt.getTime() + TimeUnit.MINUTES.toMillis(JWT_DURATION));
+        Date expiresAt = new Date(issuedAt.getTime() + TimeUnit.MINUTES.toMillis(JWT_DURATION_MINUTES));
         return Jwts.builder()
                 .header()
                 .keyId(tokenId)
