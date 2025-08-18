@@ -61,6 +61,9 @@ public class User implements UserDetails {
     @Builder.Default
     private List<RefreshToken> refreshTokens = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    @Builder.Default
+    private List<Todo> todos = new ArrayList<>();
     @NotNull
     private LocalDateTime createdAt;
 

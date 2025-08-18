@@ -95,4 +95,39 @@ public class UserService implements UserDetailsService {
                 .build();
         return data;
     }
+
+    public ResponseDTO<UserResponseDTO> update(RegisterUserRequest userRequestDTO, String username) {
+        User user = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "USER: " + username + " Not found"));
+        if (userRepository.findByUsernameAndIdNot(userRequestDTO.getUsername(), user.getId()).isPresent()) {
+            throw new UserNameAlreadyExistsException();
+        }
+        user.setUsername(userRequestDTO.getUsername());
+        user.setFirstName(userRequestDTO.getFirstName());
+        user.setLastName(userRequestDTO.getLastName());
+        user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
+        user.setUpdatedAt(LocalDateTime.now());
+
+        User savedUser = userRepository.save(user);
+        return ResponseDTO.<UserResponseDTO>builder()
+                .status(true)
+                .message("user updated successfully")
+                .data(UserMapper.toDTO(savedUser))
+                .build();
+    }
+
+    public ResponseDTO<Object> delete(String username) {
+        User user = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "USER: " + username + " Not found"));
+        user.setActive(false);
+        userRepository.save(user);
+        return ResponseDTO.builder()
+                .status(true)
+                .message("user successfully removed")
+                .build();
+    }
 }
