@@ -92,7 +92,7 @@ public class AuthController {
         User user = (User) auth.getPrincipal();
         refreshToken.setUser(user);
         refreshToken.setCreatedAt(now);
-        refreshToken.setExpiresAt(now.plusDays(REFRESH_TOKEN_DURATION));
+        refreshToken.setExpiresAt(now.plusDays(REFRESH_TOKEN_DURATION_DAYS));
         refreshTokenRepository.save(refreshToken);
 
         LoginUserResponseDTO loginCredentials = LoginUserResponseDTO.builder()
