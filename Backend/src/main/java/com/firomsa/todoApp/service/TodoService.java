@@ -30,8 +30,11 @@ public class TodoService {
         this.userRepository = userRepository;
     }
 
-    public ResponseDTO<TodoResponseDTO> get(int id) {
+    public ResponseDTO<TodoResponseDTO> get(int id, String userName) {
         Todo todo = todoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException());
+        if (todo.getUser() == null || !todo.getUser().getUsername().equals(userName)) {
+            throw new ResourceNotFoundException();
+        }
         return ResponseDTO.<TodoResponseDTO>builder()
                 .data(TodoMapper.toDTO(todo))
                 .message("successfully fetched a todo")
@@ -83,8 +86,11 @@ public class TodoService {
     }
 
     @Transactional
-    public ResponseDTO<TodoResponseDTO> update(TodoRequestDTO todoRequestDTO, int id) {
+    public ResponseDTO<TodoResponseDTO> update(TodoRequestDTO todoRequestDTO, int id, String userName) {
         Todo todo = todoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException());
+        if (todo.getUser() == null || !todo.getUser().getUsername().equals(userName)) {
+            throw new ResourceNotFoundException();
+        }
         LocalDateTime now = LocalDateTime.now();
         todo.setUpdatedAt(now);
         todo.setDescription(todoRequestDTO.getDescription());
@@ -98,7 +104,11 @@ public class TodoService {
                 .build();
     }
 
-    public ResponseDTO<Object> delete(int id) {
+    public ResponseDTO<Object> delete(int id, String userName) {
+        Todo todo = todoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException());
+        if (todo.getUser() == null || !todo.getUser().getUsername().equals(userName)) {
+            throw new ResourceNotFoundException();
+        }
         todoRepository.deleteById(id);
         return ResponseDTO.builder()
                 .message("successfully deleted a todo")

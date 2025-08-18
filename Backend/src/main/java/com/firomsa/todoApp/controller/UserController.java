@@ -84,23 +84,26 @@ public class UserController {
 
     @GetMapping("/todos/{id}")
     @Operation(summary = "For fetching a given todo")
-    public ResponseEntity<ResponseDTO<TodoResponseDTO>> getTodo(@PathVariable int id) {
-        ResponseDTO<TodoResponseDTO> response = todoService.get(id);
+    public ResponseEntity<ResponseDTO<TodoResponseDTO>> getTodo(@PathVariable int id, Principal principal) {
+        String userName = principal.getName();
+        ResponseDTO<TodoResponseDTO> response = todoService.get(id, userName);
         return ResponseEntity.ok().body(response);
     }
 
     @PutMapping("/todos/{id}")
     @Operation(summary = "For updating a given todo")
     public ResponseEntity<ResponseDTO<TodoResponseDTO>> updateTodo(@PathVariable int id,
-            @Valid @RequestBody TodoRequestDTO todoRequestDTO) {
-        ResponseDTO<TodoResponseDTO> response = todoService.update(todoRequestDTO, id);
+            @Valid @RequestBody TodoRequestDTO todoRequestDTO, Principal principal) {
+        String userName = principal.getName();
+        ResponseDTO<TodoResponseDTO> response = todoService.update(todoRequestDTO, id, userName);
         return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/todos/{id}")
     @Operation(summary = "For removing a given todo")
-    public ResponseEntity<ResponseDTO<Object>> deleteTodo(@PathVariable int id) {
-        ResponseDTO<Object> response = todoService.delete(id);
+    public ResponseEntity<ResponseDTO<Object>> deleteTodo(@PathVariable int id, Principal principal) {
+        String userName = principal.getName();
+        ResponseDTO<Object> response = todoService.delete(id, userName);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
 }
