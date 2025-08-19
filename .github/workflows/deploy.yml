@@ -16,10 +16,6 @@ jobs:
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
-            - name: Build and push
-              run: |
-                  docker compose -f docker/compose.yaml build
-                  docker compose -f docker/compose.yaml push
             - name: Build
               run: docker compose -f docker/compose.yaml build
               working-directory: ./Backend
