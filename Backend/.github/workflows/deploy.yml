@@ -20,4 +20,10 @@ jobs:
               run: |
                   docker compose -f docker/compose.yaml build
                   docker compose -f docker/compose.yaml push
+            - name: Build
+              run: docker compose -f docker/compose.yaml build
+              working-directory: ./Backend
+
+            - name: Push
+              run: docker compose -f docker/compose.yaml push
               working-directory: ./Backend
