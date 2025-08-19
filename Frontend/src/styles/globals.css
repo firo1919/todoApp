@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+	/* Font styles */
+	--font-inter: var(--font-inter), sans-serif;
+	--font-poppins: var(--font-poppins), sans-serif;
+
+	/* Color styles */
+}
+@layer base {
+	body {
+		@apply font-inter;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		@apply font-poppins;
+	}
+}
+
+@layer components {
+	.container {
+		@apply max-w-[68.75rem] w-1/10 mx-auto;
+	}
+}
