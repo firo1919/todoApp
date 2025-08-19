@@ -1,10 +1,10 @@
 export type LoginResponse = {
-	status: true;
+	status: boolean;
 	message: string;
 	data: {
 		id: string;
 		username: string;
-		active: true;
+		active: boolean;
 		role: string;
 		accessToken: string;
 		refreshToken: string;
@@ -12,12 +12,12 @@ export type LoginResponse = {
 };
 
 export type RefreshTokenResponse = {
-	status: true;
+	status: boolean;
 	message: string;
 	data: {
 		id: string;
 		username: string;
-		active: true;
+		active: boolean;
 		role: string;
 		accessToken: string;
 		refreshToken: string;
