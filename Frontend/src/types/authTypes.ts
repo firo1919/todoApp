@@ -11,6 +11,19 @@ export type LoginResponse = {
 	};
 };
 
+export type RegisterResponse = {
+	status: boolean;
+	message: string;
+	data: {
+		id: string;
+		firstName: string;
+		lastName: string;
+		username: string;
+		active: boolean;
+		role: string;
+	};
+};
+
 export type RefreshTokenResponse = {
 	status: boolean;
 	message: string;
@@ -26,4 +39,11 @@ export type RefreshTokenResponse = {
 
 export type RefreshToken = {
 	refreshToken: string;
+};
+
+export type RegisterUser = {
+	username: string;
+	firstName: string;
+	lastName: string;
+	password: string;
 };
