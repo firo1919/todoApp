@@ -40,7 +40,7 @@ export function RegisterForm() {
 			if (!response?.status) {
 				toast.error(response?.message);
 			} else {
-				toast.success("Registration successfull!");
+				toast.success("Registration successful!");
 				router.replace("/login");
 			}
 		} catch (error) {
